@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumidoc — Passport &amp; Visa Photo Maker</title>
+  <meta name="description" content="Create passport and visa photos online for printing and online submission. Crop, adjust and download print-ready ID photos in your browser." />
+  <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'&gt;&lt;rect width='32' height='32' rx='6' fill='%231f7be0'/&gt;&lt;circle cx='16' cy='13' r='6' fill='%23fff'/&gt;&lt;path d='M6 30c0-6 5-10 10-10s10 4 10 10z' fill='%23fff'/&gt;&lt;/svg&gt;" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header">
+    <div class="brand">Lumi<span>doc</span></div>
+    <nav class="steps-nav" id="stepsNav">
+      <a data-goto="0" class="active">Make Photo</a>
+      <a data-goto="1">Upload</a>
+      <a data-goto="2">Crop</a>
+      <a data-goto="3">Adjustment</a>
+      <a data-goto="4">Download</a>
+      <a href="pdf-editor.html" class="tool-link">PDF Editor ↗</a>
+    </nav>
+  </header>
+
+  <main class="stage-wrap">
+    <!-- ===================== STEP 0 — MAKE PHOTO ==================== -->
+    <section class="step card hero-card" data-step="0">
+      <div class="hero-preview">
+        <div class="hero-tile" id="heroSource">Your photo</div>
+        <div class="hero-arrow">➜</div>
+        <div class="hero-sheet">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+        <div class="hero-plus">+</div>
+        <div class="hero-single">ID photo</div>
+      </div>
+
+      <h1>Create your passport / visa photos online for printing &amp; submission</h1>
+
+      <label class="field">
+        <span>Country</span>
+        <select id="countrySelect"></select>
+      </label>
+
+      <div class="spec-list" id="specList" role="radiogroup" aria-label="Photo type"></div>
+
+      <div class="custom-fields" id="customFields" hidden>
+        <label class="field inline"><span>Width (mm)</span><input type="number" id="customW" value="35" min="10" max="200" /></label>
+        <label class="field inline"><span>Height (mm)</span><input type="number" id="customH" value="45" min="10" max="200" /></label>
+        <label class="field inline"><span>DPI</span><input type="number" id="customDpi" value="300" min="72" max="1200" /></label>
+      </div>
+
+      <button class="btn primary big" id="startBtn">Create Your Photo Now »</button>
+    </section>
+
+    <!-- ======================= STEP 1 — UPLOAD ===================== -->
+    <section class="step card" data-step="1" hidden>
+      <h2>Upload your photo</h2>
+      <p class="muted">Use a front-facing photo with even lighting and a plain background. JPG, PNG or PDF.</p>
+
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept="image/*,application/pdf" hidden />
+        <div class="dz-inner">
+          <div class="dz-icon">⬆</div>
+          <p><strong>Drag &amp; drop</strong> an image or PDF here</p>
+          <button class="btn" id="browseBtn">Browse files…</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn ghost" data-goto="0">‹ Back</button>
+        <button class="btn primary" id="toCropBtn" disabled>Continue to Crop ›</button>
+      </div>
+    </section>
+
+    <!-- ======================== STEP 2 — CROP ====================== -->
+    <section class="step card" data-step="2" hidden>
+      <h2>Crop &amp; position</h2>
+      <p class="muted">Drag the box to move, drag a corner to resize. Align the top of the head and eyes with the guides.</p>
+
+      <div class="crop-toolbar">
+        <button class="btn small" id="rotL" title="Rotate left">⟲ Rotate</button>
+        <button class="btn small" id="rotR" title="Rotate right">⟳ Rotate</button>
+        <button class="btn small" id="flipH" title="Flip horizontal">⇋ Flip</button>
+        <label class="toggle"><input type="checkbox" id="showGuides" checked /> Face guides</label>
+      </div>
+
+      <div class="crop-stage" id="cropStage">
+        <img id="cropImg" alt="Photo to crop" draggable="false" />
+        <div class="crop-box" id="cropBox">
+          <div class="guides" id="guides">
+            <div class="g-oval"></div>
+            <div class="g-line g-top"></div>
+            <div class="g-line g-eye"></div>
+          </div>
+          <span class="handle nw"></span><span class="handle ne"></span>
+          <span class="handle sw"></span><span class="handle se"></span>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn ghost" data-goto="1">‹ Back</button>
+        <button class="btn primary" id="toAdjustBtn">Apply Crop ›</button>
+      </div>
+    </section>
+
+    <!-- ===================== STEP 3 — ADJUSTMENT =================== -->
+    <section class="step card" data-step="3" hidden>
+      <h2>Adjustment</h2>
+      <div class="adjust-layout">
+        <div class="adjust-preview">
+          <canvas id="adjustCanvas"></canvas>
+        </div>
+        <div class="adjust-controls">
+          <label class="slider"><span>Brightness <em id="bVal">100%</em></span>
+            <input type="range" id="brightness" min="50" max="150" value="100" /></label>
+          <label class="slider"><span>Contrast <em id="cVal">100%</em></span>
+            <input type="range" id="contrast" min="50" max="150" value="100" /></label>
+          <label class="slider"><span>Saturation <em id="sVal">100%</em></span>
+            <input type="range" id="saturation" min="0" max="200" value="100" /></label>
+
+          <hr />
+
+          <label class="toggle big-toggle"><input type="checkbox" id="bgReplace" />
+            Remove &amp; replace background (AI)</label>
+          <label class="field inline" id="bgColorField" hidden>
+            <span>Colour</span><input type="color" id="bgColor" value="#ffffff" /></label>
+          <div class="swatches" id="bgSwatches" hidden>
+            <button type="button" data-color="#ffffff" style="background:#ffffff" title="White"></button>
+            <button type="button" data-color="#dfe6ee" style="background:#dfe6ee" title="Light grey"></button>
+            <button type="button" data-color="#c7dcf2" style="background:#c7dcf2" title="Light blue"></button>
+            <button type="button" data-color="#eef0f2" style="background:#eef0f2" title="Off-white"></button>
+          </div>
+          <p class="hint" id="bgStatus" hidden></p>
+          <p class="hint" id="bgHint" hidden>Cuts out the whole person (head and body) with in-browser AI models and places them on a solid colour. The first run downloads the models (then cached), so it needs an internet connection and may take a few seconds.</p>
+
+          <button class="btn small ghost" id="resetAdjust">Reset</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn ghost" data-goto="2">‹ Back</button>
+        <button class="btn primary" id="toDownloadBtn">Continue to Download ›</button>
+      </div>
+    </section>
+
+    <!-- ====================== STEP 4 — DOWNLOAD ==================== -->
+    <section class="step card" data-step="4" hidden>
+      <h2>Download</h2>
+      <div class="download-layout">
+        <div class="dl-single">
+          <h3>Single photo</h3>
+          <div class="dl-thumb"><canvas id="finalCanvas"></canvas></div>
+          <p class="muted" id="finalMeta"></p>
+          <div class="dl-actions">
+            <button class="btn primary" id="dlSingle">JPG ↓</button>
+            <button class="btn" id="dlSinglePdf">PDF ↓</button>
+          </div>
+        </div>
+        <div class="dl-sheet">
+          <h3>Print sheet</h3>
+          <label class="field inline"><span>Paper</span><select id="paperSelect"></select></label>
+          <div class="dl-thumb"><canvas id="sheetCanvas"></canvas></div>
+          <p class="muted" id="sheetMeta"></p>
+          <div class="dl-actions">
+            <button class="btn primary" id="dlSheet">JPG ↓</button>
+            <button class="btn" id="dlSheetPdf">PDF ↓</button>
+          </div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn ghost" data-goto="3">‹ Back</button>
+        <button class="btn" id="startOver">Start over</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Runs entirely in your browser — your photo never leaves your device. For printing &amp; online submission.</p>
+  </footer>
+
+  <!-- High-quality background removal endpoint.
+       In the Docker/compose + nginx setup this same-origin path is proxied to
+       the backend. Set to "" to use the in-browser models instead.
+       Bare local dev (uvicorn on :7000, no proxy)? In the browser console run:
+         localStorage.setItem('bgServerUrl','http://localhost:7000/remove-bg') -->
+  <script>window.BG_SERVER_URL = "/api/remove-bg";</script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/legacy/build/pdf.min.js"></script>
+  <script src="js/presets.js?v=12"></script>
+  <script src="js/app.js?v=12"></script>
+</body>
+</html>

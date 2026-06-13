@@ -1,0 +1,9 @@
+# Build context for the web (nginx) image — keep it lean, ship only front-end.
+.git/
+.gitignore
+.claude/
+node_modules/
+.env
+*.log
+backend/
+README.md

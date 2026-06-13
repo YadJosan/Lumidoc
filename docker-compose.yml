@@ -1,0 +1,33 @@
+# Lumidoc — production stack: nginx serves the static front-end and proxies
+# /api/* to the background-removal backend (same origin, so no CORS).
+#
+#   docker compose up --build        # first build downloads the model (~1 GB)
+#   open http://localhost:8080
+#
+# Configuration lives in .env (see .env.example).
+
+services:
+  backend:
+    build: ./backend
+    image: lumidoc-backend
+    environment:
+      BG_MODEL: ${BG_MODEL:-birefnet-general}
+      ALPHA_MATTING: ${ALPHA_MATTING:-1}
+      MAX_CONCURRENCY: ${MAX_CONCURRENCY:-2}
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-20971520}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    expose:
+      - "7000"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.web
+    image: lumidoc-web
+    depends_on:
+      - backend
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    restart: unless-stopped

@@ -1,0 +1,50 @@
+# ── Dependencies ──────────────────────────────────────────────
+node_modules/
+.venv/
+venv/
+env/
+ENV/
+
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── ML model / inference caches (rembg, onnx, pooch, huggingface) ─
+.u2net/
+.cache/
+*.onnx
+*.pth
+*.ckpt
+
+# ── Environment & secrets ─────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Logs & temp ───────────────────────────────────────────────
+*.log
+*.tmp
+tmp/
+temp/
+
+# ── OS files ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor / IDE ──────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── Claude Code (keep shared config, ignore personal/local) ───
+.claude/settings.local.json

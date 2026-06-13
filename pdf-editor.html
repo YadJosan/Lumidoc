@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumidoc — PDF Editor</title>
+  <meta name="description" content="Open a PDF, fill in the blanks with text, add a signature image, and download the edited PDF. Runs entirely in your browser." />
+  <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'&gt;&lt;rect width='32' height='32' rx='6' fill='%231f7be0'/&gt;&lt;circle cx='16' cy='13' r='6' fill='%23fff'/&gt;&lt;path d='M6 30c0-6 5-10 10-10s10 4 10 10z' fill='%23fff'/&gt;&lt;/svg&gt;" />
+  <link rel="stylesheet" href="css/styles.css?v=9" />
+</head>
+<body class="editor-body">
+  <header class="site-header">
+    <div class="brand">Lumi<span>doc</span></div>
+    <nav class="steps-nav">
+      <a href="index.html">Photo Tool</a>
+      <a class="active">PDF Editor</a>
+    </nav>
+  </header>
+
+  <div class="editor-toolbar" id="toolbar">
+    <input type="file" id="pdfInput" accept="application/pdf" hidden />
+    <input type="file" id="imageInput" accept="image/*" hidden />
+    <button class="btn" id="openBtn">📂 Open PDF</button>
+    <span class="tb-sep"></span>
+    <button class="btn" id="addTextBtn" disabled>＋ Text</button>
+    <button class="btn" id="addImageBtn" disabled>＋ Image / Sign</button>
+    <button class="btn" id="whiteoutBtn" title="Cover / clear existing text" disabled>⬜ White-out</button>
+    <span class="tb-sep"></span>
+    <label class="tb-field">Size <input type="number" id="fontSize" min="6" max="96" value="14" disabled /></label>
+    <button class="btn btn-bold" id="boldBtn" title="Bold" disabled>B</button>
+    <label class="tb-field">Colour <input type="color" id="fontColor" value="#111111" disabled /></label>
+    <button class="btn" id="deleteBtn" disabled>🗑 Delete</button>
+    <span class="tb-spacer"></span>
+    <button class="btn primary" id="downloadBtn" disabled>Download PDF ↓</button>
+  </div>
+
+  <p class="editor-hint" id="editorHint">Open a PDF, then click <b>＋ Text</b> and click on the page to add a field. Double-click a box to type; drag to move; use the corner to resize images.</p>
+
+  <main class="editor-main">
+    <div class="editor-empty" id="emptyState">
+      <div class="dropzone" id="pdfDrop">
+        <div class="dz-inner">
+          <div class="dz-icon">📄</div>
+          <p><strong>Drag &amp; drop</strong> a PDF here to edit it</p>
+          <button class="btn" id="browsePdf">Browse PDF…</button>
+        </div>
+      </div>
+    </div>
+    <div class="pages" id="pages"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Runs entirely in your browser — your document never leaves your device. Type to fill blanks, add a signature, download.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/legacy/build/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="js/pdfeditor.js?v=9"></script>
+</body>
+</html>
