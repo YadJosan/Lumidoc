@@ -1,10 +1,10 @@
 # Lumidoc
 
 **Lumidoc** is a browser-based passport / visa photo maker (inspired by
-IDPhotoDIY.com), plus a PDF fill-and-sign editor. Pick a country and document
-type, upload a photo, crop it to the exact required dimensions with
-face-positioning guides, fine-tune it, and download a single print-ready photo
-plus a tiled print sheet (4×6, 5×7, A4, or Letter).
+IDPhotoDIY.com), plus a PDF fill-and-sign editor and a resize/compress tool. Pick
+a country and document type, upload a photo, crop it to the exact required
+dimensions with face-positioning guides, fine-tune it, and download a single
+print-ready photo plus a tiled print sheet (4×6, 5×7, A4, or Letter).
 
 **Everything runs client-side** — the photo never leaves the browser. No server,
 no build step, no dependencies.
@@ -51,17 +51,33 @@ Notes: text uses the standard Helvetica font (Latin characters; common smart
 quotes/dashes are normalised automatically). pdf.js and pdf-lib load from a CDN,
 so the editor needs internet; your document is never uploaded anywhere.
 
+## Resize & Compress (resize.html)
+
+A utility at **resize.html** (linked from every page's header) for hitting the
+dimension and file-size limits that visa/passport portals impose — all in the
+browser, no upload:
+
+- **Images** — resize by exact dimensions (with aspect-ratio lock) or by
+  percentage, convert between JPEG / PNG / WebP, set quality, or **compress to a
+  target file size** (e.g. "under 240 KB" — it binary-searches quality and
+  downscales as needed). Shows the resulting dimensions and size.
+- **PDFs** — shrink the file by re-rendering each page at a chosen resolution
+  (72–150 DPI) and JPEG quality, then rebuilding with jsPDF. Reports the
+  before → after size. Best for oversized scans; selectable text is flattened.
+
 ## Project layout
 
 ```
 lumidoc/
 ├── index.html            # photo tool — single-page UI, five steps
 ├── pdf-editor.html       # PDF editor — open, fill/sign, download
+├── resize.html           # resize & compress — images and PDFs
 ├── css/styles.css        # shared styling (blue Lumidoc theme)
 ├── js/
 │   ├── presets.js        # country/document specs + paper sizes
 │   ├── app.js            # photo tool: upload, crop, adjust, sheet, download
-│   └── pdfeditor.js      # PDF editor: render, text/image overlays, export
+│   ├── pdfeditor.js      # PDF editor: render, text/image overlays, export
+│   └── resize.js         # resize/compress: images + PDF rasterise-rebuild
 ├── backend/              # optional high-quality background-removal service
 │   ├── app.py            # FastAPI + rembg/BiRefNet
 │   ├── requirements.txt

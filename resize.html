@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumidoc — Resize &amp; Compress</title>
+  <meta name="description" content="Resize and compress images and PDFs in your browser — fit dimension and file-size limits for visa/passport portals." />
+  <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'&gt;&lt;rect width='32' height='32' rx='6' fill='%231f7be0'/&gt;&lt;circle cx='16' cy='13' r='6' fill='%23fff'/&gt;&lt;path d='M6 30c0-6 5-10 10-10s10 4 10 10z' fill='%23fff'/&gt;&lt;/svg&gt;" />
+  <link rel="stylesheet" href="css/styles.css?v=12" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">Lumi<span>doc</span></div>
+    <nav class="steps-nav">
+      <a href="index.html">Photo Tool</a>
+      <a href="pdf-editor.html">PDF Editor</a>
+      <a class="active">Resize</a>
+    </nav>
+  </header>
+
+  <main class="stage-wrap">
+    <section class="card">
+      <h2 style="color:#fff;margin:0 0 14px">Resize &amp; Compress</h2>
+
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="image">Image</button>
+        <button class="tab" data-tab="pdf">PDF</button>
+      </div>
+
+      <!-- ============================ IMAGE ============================ -->
+      <div class="tab-panel" data-panel="image">
+        <div class="dropzone" id="imgDrop">
+          <input type="file" id="imgInput" accept="image/*" hidden />
+          <div class="dz-inner">
+            <div class="dz-icon">🖼️</div>
+            <p><strong>Drag &amp; drop</strong> an image (JPG / PNG / WebP)</p>
+            <button class="btn" id="imgBrowse">Browse…</button>
+          </div>
+        </div>
+
+        <div class="resize-layout" id="imgWork" hidden>
+          <div class="resize-preview"><img id="imgPreview" alt="preview" /></div>
+          <div class="resize-controls">
+            <label class="field"><span>Resize by</span>
+              <select id="imgMode">
+                <option value="dimensions">Dimensions (px)</option>
+                <option value="percent">Percentage</option>
+                <option value="filesize">Target file size</option>
+              </select>
+            </label>
+
+            <div id="imgDimFields">
+              <div class="row2">
+                <label class="field inline"><span>Width</span><input type="number" id="imgW" min="1" /></label>
+                <label class="field inline"><span>Height</span><input type="number" id="imgH" min="1" /></label>
+              </div>
+              <label class="toggle"><input type="checkbox" id="imgLock" checked /> Lock aspect ratio</label>
+            </div>
+
+            <label class="slider" id="imgPctField" hidden><span>Scale <em id="imgPctVal">100%</em></span>
+              <input type="range" id="imgPct" min="5" max="100" value="100" /></label>
+
+            <label class="field inline" id="imgTargetField" hidden><span>Target</span>
+              <input type="number" id="imgTarget" min="10" value="240" /> KB</label>
+
+            <label class="field"><span>Output format</span>
+              <select id="imgFormat">
+                <option value="image/jpeg">JPEG</option>
+                <option value="image/png">PNG</option>
+                <option value="image/webp">WebP</option>
+              </select>
+            </label>
+
+            <label class="slider" id="imgQualityField"><span>Quality <em id="imgQVal">85%</em></span>
+              <input type="range" id="imgQuality" min="30" max="100" value="85" /></label>
+
+            <p class="readout" id="imgReadout">—</p>
+            <button class="btn primary" id="imgDownload" disabled>Download ↓</button>
+            <button class="btn ghost small" id="imgReset">Choose another</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================= PDF ============================= -->
+      <div class="tab-panel" data-panel="pdf" hidden>
+        <div class="dropzone" id="pdfDrop">
+          <input type="file" id="pdfInput" accept="application/pdf" hidden />
+          <div class="dz-inner">
+            <div class="dz-icon">📄</div>
+            <p><strong>Drag &amp; drop</strong> a PDF to compress</p>
+            <button class="btn" id="pdfBrowse">Browse…</button>
+          </div>
+        </div>
+
+        <div class="resize-layout" id="pdfWork" hidden>
+          <div class="resize-preview"><canvas id="pdfPreview"></canvas></div>
+          <div class="resize-controls">
+            <p class="muted" id="pdfInfo" style="color:#eaf2fd"></p>
+            <label class="field"><span>Resolution</span>
+              <select id="pdfDpi">
+                <option value="72">Low — 72 DPI (smallest)</option>
+                <option value="96" selected>Screen — 96 DPI</option>
+                <option value="120">Good — 120 DPI</option>
+                <option value="150">High — 150 DPI</option>
+              </select>
+            </label>
+            <label class="slider"><span>Quality <em id="pdfQVal">75%</em></span>
+              <input type="range" id="pdfQuality" min="30" max="95" value="75" /></label>
+
+            <button class="btn" id="pdfCompress">Compress</button>
+            <p class="readout" id="pdfReadout">—</p>
+            <button class="btn primary" id="pdfDownload" disabled>Download ↓</button>
+            <button class="btn ghost small" id="pdfReset">Choose another</button>
+            <p class="hint" style="color:#eaf2fd">Pages are re-rendered as images at the chosen resolution — ideal for shrinking scanned documents. Selectable text is flattened in the process.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Runs entirely in your browser — your files never leave your device.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/legacy/build/pdf.min.js"></script>
+  <script src="js/resize.js?v=12"></script>
+</body>
+</html>

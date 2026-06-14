@@ -204,6 +204,32 @@ input[type="color"] { width: 52px; height: 34px; padding: 2px; border: 1px solid
   .steps-nav a { font-size: 11px; }
 }
 
+/* ========================= Resize & Compress ====================== */
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.tab {
+  border: 1px solid rgba(255,255,255,.5); background: transparent; color: #fff;
+  padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.tab:hover { background: rgba(255,255,255,.12); }
+.tab.active { background: #fff; color: var(--blue-dark); border-color: #fff; }
+.resize-layout { display: flex; gap: 22px; flex-wrap: wrap; }
+.resize-preview {
+  background: #0e2a44; border-radius: 8px; padding: 14px; box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: center; min-width: 220px;
+}
+.resize-preview img, .resize-preview canvas { max-width: 260px; max-height: 340px; border-radius: 4px; }
+.resize-controls { flex: 1; min-width: 260px; }
+.resize-controls .row2 { display: flex; gap: 10px; }
+.resize-controls .row2 .field { flex: 1; }
+.resize-controls .row2 .field.inline input[type="number"] { width: 100%; }
+.resize-controls .btn { width: 100%; margin-bottom: 8px; }
+.resize-controls .btn.small { width: auto; }
+.readout {
+  color: #fff; font-weight: 600; font-size: 14px;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3);
+  padding: 9px 12px; border-radius: 8px; margin: 6px 0 14px;
+}
+
 /* ============================ PDF editor =========================== */
 .editor-body { background: #e9eef5; }
 .editor-toolbar {

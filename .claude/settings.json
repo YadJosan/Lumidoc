@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(\"cleaned\")",
+      "PowerShell($ErrorActionPreference='Continue')",
+      "PowerShell(if \\($?\\) { \"app.js OK\" })",
+      "PowerShell(node --check \"D:\\\\dev\\\\photeditortool\\\\js\\\\pdfeditor.js\")",
+      "PowerShell(if \\($?\\) { \"pdfeditor.js OK\" })",
+      "PowerShell(python -m py_compile \"D:\\\\dev\\\\photeditortool\\\\backend\\\\app.py\")",
+      "PowerShell(if \\($?\\) { \"app.py OK \\(syntax\\)\" })",
+      "PowerShell(python -c \"import fastapi, onnxruntime, PIL, pymatting; print\\('fastapi', fastapi.__version__\\); print\\('onnxruntime', onnxruntime.__version__\\); print\\('pymatting OK'\\); print\\('pillow', PIL.__version__\\)\" 2>&1)",
+      "PowerShell(python -c \"import multipart; print\\('python-multipart OK'\\)\" 2>&1)",
+      "PowerShell(python -c \"from rembg.sessions import sessions_names; print\\(sessions_names\\)\" 2>&1)",
+      "PowerShell(\"--- support deps ---\")",
+      "PowerShell(\"--- available rembg models ---\")",
+      "PowerShell(python -m uvicorn --version 2>&1)",
+      "PowerShell(python -c \"import sysconfig; print\\(sysconfig.get_path\\('scripts', 'nt_user'\\)\\)\" 2>&1)",
+      "PowerShell(\"--- python -m uvicorn works? ---\")",
+      "PowerShell(\"--- your user Scripts dir \\(where the uvicorn.exe lives\\) ---\")",
+      "PowerShell(if \\($?\\) { \"app.py OK\" })",
+      "PowerShell(python -c \"import yaml,sys; yaml.safe_load\\(open\\(r'D:\\\\dev\\\\photeditortool\\\\docker-compose.yml'\\)\\); print\\('docker-compose.yml valid YAML'\\)\" 2>&1)",
+      "PowerShell(\"removed pycache\")",
+      "PowerShell(docker exec photeditortool-web-1 sh -c 'wget -qO- http://localhost/ >/dev/null 2>&1; echo \"localhost_exit=$?\"; wget -qO- http://127.0.0.1/ >/dev/null 2>&1; echo \"ipv4_exit=$?\"' 2>&1)",
+      "PowerShell($ErrorActionPreference='SilentlyContinue')",
+      "PowerShell(docker compose up -d --build web 2>&1)"
+    ]
+  }
+}
